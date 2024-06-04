@@ -10,7 +10,7 @@ import { RomajiSplit, colorToString, mix, pad, readColor, setAlphaRatio } from '
 export class MapService {
 	currentTime = 0;
 	map!: KaraMakerMap;
-	audioBuffer!: AudioBuffer;
+	audioBuffer!: AudioBuffer; 
 	audioContext!: AudioContext;
 	playContext?: PlayContext;
 	currentSentences!: (Sentence | undefined)[];
@@ -27,9 +27,9 @@ export class MapService {
 		let track = {
 			datas: datas,
 			start: 0,
-			offset : 0,
-			bpm : 120,
-			volume : 100
+			offset: 0,
+			bpm: 120,
+			volume: 100
 		};
 
 		let voices = [{
@@ -45,7 +45,7 @@ export class MapService {
 			beatsPerLine: 8,
 			lyricsPerBeat: 2,
 			lyrics: [],
-			outline:[],
+			outline: [],
 			metronomeVolume: 100,
 			waitingLyricsPosition: 0,
 			waitingLyrics: []
@@ -198,7 +198,7 @@ export class MapService {
 				if (this.selecting.deselecting && min !== 0)
 					this.map.outline[min - 1].hold = false;
 			}
-			if (updated)
+			if (updated && !this.playing())
 				this.push();
 		}
 
@@ -340,7 +340,12 @@ export class MapService {
 
 	public push() {
 		this.isSaved = false;
-		this.mapHistory.push(structuredClone(this.map));
+		let newMap = { ...this.map };
+		newMap.lyrics = structuredClone(this.map.lyrics);
+		newMap.outline = structuredClone(this.map.outline);
+		newMap.waitingLyrics = structuredClone(this.map.waitingLyrics);
+		this.mapHistory.push(newMap);
+		
 		if (this.mapHistory.length > 100)
 			this.mapHistory.splice(1, 1);
 	}

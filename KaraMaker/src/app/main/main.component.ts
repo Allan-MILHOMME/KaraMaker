@@ -77,7 +77,7 @@ export class MainComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit() {
-		this.httpClient.get('../../assets/metronome.wav', { responseType: 'arraybuffer' }).subscribe(buffer =>
+		this.httpClient.get('assets/metronome.wav', { responseType: 'arraybuffer' }).subscribe(buffer =>
 			this.mapService.audioContext.decodeAudioData(buffer).then(result => this.metronomeBuffer = result)
 		);
 	}
@@ -229,6 +229,8 @@ export class MainComponent implements OnInit, OnDestroy {
 
 	save() {
 		this.mapService.isSaved = true;
+		let size = BSON.calculateObjectSize(this.mapService.map);
+		BSON.setInternalBufferSize(size);
 		let blob = new Blob([BSON.serialize(this.mapService.map)]);
 		FileSaver.saveAs(blob, 'map.kmp');
 	}

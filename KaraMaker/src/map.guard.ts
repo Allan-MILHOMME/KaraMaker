@@ -8,7 +8,7 @@ export const MapGuard: CanActivateFn = (route, state) => {
 	const service = inject(MapService);
 	const router = inject(Router);
 
-	if (service.map === undefined || service.audioBuffer === undefined || service.audioContext === undefined) {
+	if (service.map === undefined || service.audioContext === undefined) {
 		router.navigateByUrl('/home');
 		return false;
 	}

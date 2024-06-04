@@ -13,27 +13,27 @@ export class AppComponent {
 	constructor(private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer) {
 		this.matIconRegistry.addSvgIcon(
 			"metronome",
-			this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/metronome.svg")
+			this.domSanitizer.bypassSecurityTrustResourceUrl("assets/metronome.svg")
 		);
 
 		this.matIconRegistry.addSvgIcon(
 			"normal",
-			this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/normal.svg")
+			this.domSanitizer.bypassSecurityTrustResourceUrl("assets/normal.svg")
 		);
 
 		this.matIconRegistry.addSvgIcon(
 			"upper",
-			this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/upper.svg")
+			this.domSanitizer.bypassSecurityTrustResourceUrl("assets/upper.svg")
 		);
 
 		this.matIconRegistry.addSvgIcon(
 			"lower",
-			this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/lower.svg")
+			this.domSanitizer.bypassSecurityTrustResourceUrl("assets/lower.svg")
 		);
 
 		this.matIconRegistry.addSvgIcon(
 			"romaji",
-			this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/romaji.svg")
+			this.domSanitizer.bypassSecurityTrustResourceUrl("assets/romaji.svg")
 		);
 	}
 }
