@@ -1,0 +1,72 @@
+<div [style.float]="'top'">
+	<div [style.float]="'top'">
+		<mat-form-field>
+			<mat-label>BPM</mat-label>
+			<input matInput required type="number" min="1" max="1000" [formControl]="controls.controls.bpmControl" />
+			@if (controls.controls.bpmControl.hasError('required')) {
+			<mat-error>Choose a BPM</mat-error>
+			}
+			@if (controls.controls.bpmControl.hasError('min')) {
+			<mat-error>The BPM must be superior to 1</mat-error>
+			}
+			@if (controls.controls.bpmControl.hasError('max')) {
+			<mat-error>The BPM must be inferior to 1000</mat-error>
+			}
+		</mat-form-field>
+
+		<mat-form-field>
+			<mat-label>Start time</mat-label>
+			<input matInput required type="number" min="0" max="this.mapService.getDuration()" [formControl]="controls.controls.startControl" />
+			@if (controls.controls.startControl.hasError('required')) {
+			<mat-error>Choose a starting time</mat-error>
+			}
+			@if (controls.controls.startControl.hasError('min')) {
+			<mat-error>The starting time must be positive</mat-error>
+			}
+		</mat-form-field>
+
+		<mat-form-field>
+			<mat-label>Beats per line</mat-label>
+			<input matInput required type="number" min="1" max="32" [formControl]="controls.controls.beatsPerLineControl" />
+			@if (controls.controls.beatsPerLineControl.hasError('required')) {
+			<mat-error>Choose a number of beats per line</mat-error>
+			}
+			@if (controls.controls.beatsPerLineControl.hasError('min')) {
+			<mat-error>The number must be positive</mat-error>
+			}
+			@if (controls.controls.beatsPerLineControl.hasError('max')) {
+			<mat-error>The number must be 32 or less</mat-error>
+			}
+		</mat-form-field>
+
+		<mat-form-field>
+			<mat-label>Beats per line</mat-label>
+			<input matInput required type="number" min="1" max="8" [formControl]="controls.controls.lyricsPerBeatControl" />
+			@if (controls.controls.lyricsPerBeatControl.hasError('required')) {
+			<mat-error>Choose a number of lyric per beat</mat-error>
+			}
+			@if (controls.controls.lyricsPerBeatControl.hasError('min')) {
+			<mat-error>The number must be positive</mat-error>
+			}
+			@if (controls.controls.lyricsPerBeatControl.hasError('max')) {
+			<mat-error>The number must be 8 or less</mat-error>
+			}
+		</mat-form-field>
+	</div>
+	<div [style.float]="'top'">
+		<div *ngFor="let voice of mapService.map.voices; index as voiceIndex">
+			<input type="text" [(ngModel)]="voice.name">
+			<input [(colorPicker)]="voice.color" [style.background]="voice.color" />
+			<button>
+				<mat-icon aria-hidden="false" aria-label="Delete" fontIcon="delete" class="red-icon" (click)="deleteVoice(voiceIndex)"></mat-icon>
+			</button>
+		</div>
+		<button>
+			<mat-icon aria-hidden="false" aria-label="Add" fontIcon="add" (click)="addVoice()"></mat-icon>
+		</button>
+	</div>
+	<textarea [(ngModel)]="waitingLyrics" [disabled]="mapService.map.waitingLyrics.length !== 0"></textarea>
+	<button type="button" (click)="romajize()">Romajize</button>
+	<button type="submit" (click)="submitLyrics()">{{mapService.map.waitingLyrics.length !== 0 ? 'Reset' : 'Validate'}}</button>
+</div>
+<button type="submit" (click)="submit()">Ok</button>

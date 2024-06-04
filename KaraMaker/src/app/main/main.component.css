@@ -1,0 +1,139 @@
+mat-table {
+	width: 100px;
+}
+
+table {
+	width: 100%;
+	display:inline-block;
+}
+
+input{
+	width: calc(100% - 5px);
+	margin: 0;
+	border: 0;
+	padding: 0 0 0px 5px;
+	outline: 0;
+	border-left: 0;
+	border-collapse: collapse;
+	height: 40px;
+	font-size: 18px;
+	padding-inline:2px;
+}
+
+.lyricWrap {
+	padding: 0;
+	font-size: 0;
+	border-collapse: collapse;
+}
+
+.lyricTop {
+	height: 8px;
+	background-color: white;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-collapse: collapse;
+}
+
+.lyricBottom {
+	height: 12px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-collapse: collapse;
+	padding-inline:2px;
+}
+
+.timingBar {
+	width: 4px;
+	background-color: gold;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-collapse: collapse;
+	position: absolute;
+	height: 50px;
+}
+
+.even {
+	background: #E8E8E8;
+}
+
+.sentence {
+	display:flex;
+	justify-content: center;
+}
+
+.sentenceLyric {
+	font-weight: 600;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size: 40px;
+	-webkit-text-stroke-width: 1.5px;
+	-webkit-text-stroke-color: black;
+	float: left;
+	white-space:break-spaces;
+}
+
+.sentenceContainer {
+	top: 0;
+	position: relative;
+	height: 100px;
+	background-color:white;
+}
+
+.sentenceRelative {
+	height: 50px;
+	position:relative;
+}
+
+nav {
+	height: 40px;
+	background-color: darkslategray;
+	display: flex;
+	justify-content: space-between;
+}
+
+mat-icon {
+	color:black
+}
+
+mat-select {
+	width: 150px;
+}
+
+.sub-icon {
+	position:relative;
+	top: -10px;
+	left: -20px;
+	font-size: 10px;
+}
+
+.navbar {
+	position: sticky;
+	top: 0;
+	z-index: 100;
+}
+
+.waitingLyricsContainer {
+	height: 48px;
+	font-weight: 600;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 40px;
+	-webkit-text-stroke-width: 1.5px;
+	-webkit-text-stroke-color: black;
+	background-color: white;
+	display: flex;
+	justify-content: center;
+	color: white;
+	border-top: 2px solid black;
+	white-space: break-spaces;
+}
+
+.underline{
+	position:relative;
+	bottom: 0;
+	height: 2px;
+	background-color: gray;
+	width: calc(100% - 6px);
+	left: 3px;
+}

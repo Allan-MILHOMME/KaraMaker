@@ -1,0 +1,119 @@
+<div>
+	<div class="navbar">
+		<nav>
+			<div>
+				<mat-select [(value)]="mapService.metronomeMode">
+					<mat-select-trigger>
+						<mat-icon svgIcon="metronome"></mat-icon>
+						<mat-icon class="sub-icon">{{mapService.metronomeMode}}</mat-icon>
+					</mat-select-trigger>
+					<mat-option [value]="'volume_off'">
+						<mat-icon svgIcon="metronome"></mat-icon>
+						<mat-icon class="sub-icon">volume_off</mat-icon>
+					</mat-option>
+					<mat-option [value]="'volume_on'">
+						<mat-icon svgIcon="metronome"></mat-icon>
+						<mat-icon class="sub-icon">volume_on</mat-icon>
+					</mat-option>
+					<mat-option [value]="'music-note'">
+						<mat-icon svgIcon="metronome"></mat-icon>
+						<mat-icon class="sub-icon">music-note</mat-icon>
+					</mat-option>
+					<mat-option [value]="'record_voice_over'">
+						<mat-icon svgIcon="metronome"></mat-icon>
+						<mat-icon class="sub-icon">record_voice_over</mat-icon>
+					</mat-option>
+				</mat-select>
+
+				<mat-select [(value)]="mapService.insertionMode" (selectionChange)="mapService.updateWaitingSentence()">
+					<mat-select-trigger>
+						<mat-icon [svgIcon]="mapService.insertionMode"></mat-icon>
+					</mat-select-trigger>
+					<mat-option [value]="'normal'">
+						<mat-icon svgIcon="normal"></mat-icon>
+					</mat-option>
+					<mat-option [value]="'upper'">
+						<mat-icon svgIcon="upper"></mat-icon>
+					</mat-option>
+					<mat-option [value]="'lower'">
+						<mat-icon svgIcon="lower"></mat-icon>
+					</mat-option>
+					<mat-option [value]="'romaji'">
+						<mat-icon svgIcon="romaji"></mat-icon>
+					</mat-option>
+				</mat-select>
+
+				<mat-slider>
+					<input matSliderThumb [(value)]="map.track.volume" (change)="mapService.updateVolume()">
+				</mat-slider>
+
+				<mat-slider >
+					<input matSliderThumb [(value)]="map.metronomeVolume">
+				</mat-slider>
+			</div>
+
+			<div>
+
+				<button (click)="save()">
+					<mat-icon>save</mat-icon>
+				</button>
+
+				<button (click)="export()">
+					<mat-icon>save_alt</mat-icon>
+				</button>
+
+				<button (click)="toTiming()">
+					<mat-icon>build</mat-icon>
+				</button>
+
+				<button (click)="close()">
+					<mat-icon>close</mat-icon>
+				</button>
+			</div>
+		</nav>
+
+		<div class="sentenceContainer">
+			<ng-container *ngFor="let sentence of mapService.currentSentences">
+				<div class="sentenceRelative">
+					<div *ngIf="sentence" class="sentence">
+						<div *ngFor="let lyric of sentence.lyrics" class="sentenceLyric"
+							 [style.color]="mapService.getVoiceColor(sentence.voice, sentence.alpha, lyric.coloration)"
+							 [style.-webkit-text-stroke-color]="mapService.getBlackAlphaRatio(sentence.alpha)">{{lyric.content}}</div>
+					</div>
+				</div>
+			</ng-container>
+		</div>
+
+		<div *ngIf="mapService.currentWaitingSentence.length > 0" class="waitingLyricsContainer">
+			<div *ngFor="let c of mapService.currentWaitingSentence"
+				 [style.color]="c.used ? 'gray' : 'white'">{{c.content}}<div *ngIf="mapService.insertionMode==='romaji'" class="underline"> </div></div>
+		</div>
+	</div>
+
+	<table cellspacing="0" cellpadding="0">
+		<tr *ngFor="let line of currentMatrix; index as lineIndex">
+			<td *ngFor="let lyric of line; index as colIndex" class="lyricWrap"
+				(dblclick)="mapService.setCurrentTime(mapService.getLineDuration() * lineIndex + mapService.getLyricDuration() * colIndex)">
+				<div class="lyricTop"></div>
+				<ng-container *ngFor="let voice of map.voices; index as voiceIndex">
+					<input type="text" [(ngModel)]="map.lyrics[lyric][voiceIndex].content"
+						   [style.background-color]="voice.color+'A0'"
+						   (keydown.code.control.numpadsubtract)="hold(lineIndex * mapService.getLyricsPerLine() + colIndex, voiceIndex, $event)"
+						   (input)="mapService.updateLyric(lyric, voiceIndex)"
+						   [style.border-right]="map.lyrics[lyric][voiceIndex].hold ? '1px solid ' + voice.color+'00' : '1px solid black'" />
+					<div [style.float]="'left'">
+						Test
+					</div>
+				</ng-container>
+				<div class="lyricBottom"
+					 [style.background-color]="map.outline[lyric].selected ? 'dodgerblue': 'lightgray'"
+					 [style.border-right]="map.outline[lyric].hold ? '0' : '1px solid black'"></div>
+			</td>
+		</tr>
+	</table>
+
+	<div class="timingBar" #cursor
+		 [style.left]="mapService.getCurrentPositionWidth() * 100 + '%'"
+		 [style.top]="mapService.getCurrentPositionLine() * (40 * map.voices.length + 20) + 140 + (mapService.currentWaitingSentence.length !== 0 ? 50 : 0) + 'px'"
+		 [style.height]="(40 * map.voices.length + 20) + 'px'"></div>
+</div>
