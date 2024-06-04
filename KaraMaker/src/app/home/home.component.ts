@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
 import { MapService } from '../../services/MapService';
 import { KaraMakerMap } from '../../maps/KaraMakerMap';
-import BSON from 'bson';
+import BSON, { Binary } from 'bson';
 
 
 @Component({
@@ -24,7 +24,8 @@ export class HomeComponent {
 				f.arrayBuffer().then(result => {
 					if (f.name.endsWith(".kmp")) {
 						mapService.map = BSON.deserialize(result) as KaraMakerMap;
-						mapService.map.track.datas = mapService.map.track.datas.buffer as Uint8Array;
+						let t = new Uint8Array((<Binary><unknown>mapService.map.track.datas).buffer);
+						mapService.map.track.datas = t;
 					}
 					else {
 						mapService.createMap(new Uint8Array(result));
@@ -33,7 +34,7 @@ export class HomeComponent {
 					if (f.name.endsWith(".kmp"))
 						mapService.isSaved = true;
 					mapService.audioContext = new (window.AudioContext)();
-					mapService.audioContext.decodeAudioData(mapService.map.track.datas.buffer.slice(0, result.byteLength)).then(decodedData => {
+					mapService.audioContext.decodeAudioData(mapService.map.track.datas.buffer.slice(0, mapService.map.track.datas.length)).then(decodedData => {
 						mapService.audioBuffer = decodedData;
 						mapService.updateLyricsSize();
 						router.navigate(["../timing"]);
