@@ -34,8 +34,8 @@ export class MapService {
 
 		let voices = [{
 			name: "Default",
-			index: 0,
-			color: "#ff5733"
+			color: "#ff5733",
+			insertInto: true
 		}];
 
 		this.map = {
@@ -48,7 +48,7 @@ export class MapService {
 			outline: [],
 			metronomeVolume: 100,
 			waitingLyricsPosition: 0,
-			waitingLyrics: []
+			waitingLyrics: [],
 		}
 	}
 

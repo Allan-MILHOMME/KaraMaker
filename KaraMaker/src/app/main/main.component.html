@@ -85,6 +85,15 @@
 		</div>
 
 		<div *ngIf="mapService.currentWaitingSentence.length > 0" class="waitingLyricsContainer">
+			<div *ngFor="let voice of map.voices; index as voiceIndex">
+				<div class="divVoiceInsert"
+					 [style.background-color]="voice.color+'A0'"
+					 [style.left]="10 + voiceIndex * 50+'px'"
+					 >
+					<input [(ngModel)]="voice.insertInto" type="checkbox" color="yellow" class="voiceInsert" />
+				</div>
+				
+			</div>
 			<div *ngFor="let c of mapService.currentWaitingSentence"
 				 [style.color]="c.used ? 'gray' : 'white'">{{c.content}}<div *ngIf="mapService.insertionMode==='romaji'" class="underline"> </div></div>
 		</div>

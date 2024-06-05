@@ -46,6 +46,7 @@ export class TimingComponent {
 		let voice = {
 			name: 'Voice ' + (this.mapService.map.voices.length + 1),
 			color: defaultColor,
+			insertInto: false
 		};
 		this.mapService.map.voices.push(voice);
 

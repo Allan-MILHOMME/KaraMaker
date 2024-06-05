@@ -22,7 +22,6 @@ export class MainComponent implements OnInit, OnDestroy {
 	metronomeBuffer?: AudioBuffer;
 	currentMatrix: number[][] = [];
 	map: KaraMakerMap;
-	
 
 	@ViewChild('cursor') cursor?: ElementRef<HTMLInputElement>;
 
@@ -129,8 +128,9 @@ export class MainComponent implements OnInit, OnDestroy {
 						if (currentSentence.length == char.length)
 							char += '.';
 						if (add)
-							for (let voice of this.map.lyrics[currentLyric])
-								voice.content += char;
+							for (let i = 0; i < this.map.lyrics[currentLyric].length; i++)
+								if (this.map.voices[i].insertInto)
+									this.map.lyrics[currentLyric][i].content += char;
 						this.map.waitingLyricsPosition += oldChar.length;
 					}
 					else {
@@ -140,8 +140,9 @@ export class MainComponent implements OnInit, OnDestroy {
 							if (currentSentence.length == splits[0].length)
 								splits[0] += '.';
 							if (add)
-								for (let voice of this.map.lyrics[currentLyric])
-									voice.content += splits[0];
+								for (let i = 0; i < this.map.lyrics[currentLyric].length; i++)
+								if (this.map.voices[i].insertInto)
+									this.map.lyrics[currentLyric][i].content += splits[0];
 							this.map.waitingLyricsPosition += split.length;
 						}
 					}

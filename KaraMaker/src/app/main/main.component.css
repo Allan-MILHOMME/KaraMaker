@@ -137,3 +137,17 @@ mat-select {
 	width: calc(100% - 6px);
 	left: 3px;
 }
+
+.divVoiceInsert {
+	height: 40px;
+	width: 40px;
+	position: fixed;
+	top: 150px;
+}
+
+.voiceInsert {
+	height: 20px;
+	width:20px;
+	margin: 10px 10px 10px 10px;
+	position:fixed;
+}
