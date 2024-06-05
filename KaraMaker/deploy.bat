@@ -1,0 +1,1 @@
+ng deploy --base-href="https://allan-milhomme.github.io/KaraMaker/"

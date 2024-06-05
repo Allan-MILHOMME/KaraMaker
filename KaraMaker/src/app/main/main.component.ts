@@ -262,7 +262,7 @@ export class MainComponent implements OnInit, OnDestroy {
 				lyrics += "Dialogue: 0," +
 					timestampToString(sentence.startTime + this.map.track.start) + ',' +
 					timestampToString(sentence.endTime + this.map.track.start) + ',' +
-					this.map.voices[i].name + ",,0,0,0,fx,{\\k100\\fad(1000,500)}" + sentenceString + '\n'
+					this.map.voices[i].name + ",,0,0,0,fx,{\\k30\\fad(300,200)}" + sentenceString + '\n'
 
 					sentenceString + "\n";
 			}

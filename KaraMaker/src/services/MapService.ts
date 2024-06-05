@@ -258,14 +258,14 @@ export class MapService {
 							start = k + 1;
 						}
 						if (isPoint && currentSentenceLyrics.length > 0) {
-								let startTime = currentSentenceLyrics[0].lyric * this.getLyricDuration() - 1;
-								let endTime = currentSentenceLyrics[currentSentenceLyrics.length - 1].end * this.getLyricDuration() + 0.5;
+								let startTime = currentSentenceLyrics[0].lyric * this.getLyricDuration() - 0.3;
+								let endTime = currentSentenceLyrics[currentSentenceLyrics.length - 1].end * this.getLyricDuration() + 0.2;
 								let alpha = 1;
-								if (this.currentTime > startTime && this.currentTime < startTime + 1)
-									alpha = (this.currentTime - startTime) / 1;
+							if (this.currentTime > startTime && this.currentTime < startTime + 0.3)
+								alpha = (this.currentTime - startTime) / 0.3;
 
-								if (this.currentTime > endTime - 0.5 && this.currentTime < endTime)
-									alpha = (endTime - this.currentTime) / 0.5;
+								if (this.currentTime > endTime - 0.2 && this.currentTime < endTime)
+									alpha = (endTime - this.currentTime) / 0.2;
 
 							let activeSentences = sentences.filter(s => s.endTime >= startTime && s.startTime <= endTime);
 								let position = 0;
@@ -279,14 +279,14 @@ export class MapService {
 				}
 			}
 			if (currentSentenceLyrics.length > 0) {
-				let startTime = currentSentenceLyrics[0].lyric * this.getLyricDuration() - 1;
-				let endTime = currentSentenceLyrics[currentSentenceLyrics.length - 1].end * this.getLyricDuration() + 0.5;
+				let startTime = currentSentenceLyrics[0].lyric * this.getLyricDuration() - 0.3;
+				let endTime = currentSentenceLyrics[currentSentenceLyrics.length - 1].end * this.getLyricDuration() + 0.2;
 				let alpha = 1;
-				if (this.currentTime > startTime && this.currentTime < startTime + 1)
-					alpha = (this.currentTime - startTime) / 1;
+				if (this.currentTime > startTime && this.currentTime < startTime + 0.3)
+					alpha = (this.currentTime - startTime) / 0.3;
 
-				if (this.currentTime > endTime - 0.5 && this.currentTime < endTime)
-					alpha = (endTime - this.currentTime) / 0.5;
+				if (this.currentTime > endTime - 0.2 && this.currentTime < endTime)
+					alpha = (endTime - this.currentTime) / 0.2;
 
 				let activeSentences = sentences.filter(s => s.endTime >= startTime && s.startTime <= endTime);
 				let position = 0;
