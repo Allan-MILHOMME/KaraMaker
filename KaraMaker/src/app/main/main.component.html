@@ -47,13 +47,16 @@
 					<input matSliderThumb [(value)]="map.track.volume" (change)="mapService.updateVolume()">
 				</mat-slider>
 
-				<mat-slider >
+				<mat-slider>
 					<input matSliderThumb [(value)]="map.metronomeVolume">
 				</mat-slider>
+
+				<div [style.display]="'inline-block'">
+					{{this.mapService.getCurrentTimeString()}}
+				</div>
 			</div>
 
 			<div>
-
 				<button (click)="save()">
 					<mat-icon>save</mat-icon>
 				</button>

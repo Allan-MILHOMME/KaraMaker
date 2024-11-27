@@ -138,12 +138,15 @@ Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour,
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
-{lyrics}`;
+Comment: 0,0:00:00.00,0:00:00.00,Default,,0,0,0,template pre-line all keeptags,!retime("line",$start < 900 and -$start or -900,200)!{!$start < 900 and "\\\\k" .. ($start/10) or "\\\\k90"!\\fad(!$start < 900 and $start or 300!,200)}
+{comments}{dialogs}`;
 
 export let colorExport = "Style: {name},Arial,24,{color},&H00FFFFFF,&H00000000,&H00000000,-1,0,0,0,100,100,0,0,1,1.5,0,8,2,2,20,1";
 
 
 export function timestampToString(timestamp: number) {
+	if (timestamp < 0)
+		timestamp = 0;
 	let hours = Math.floor(timestamp / 60 / 60);
 	timestamp -= hours * 60 * 60;
 	let minutes = Math.floor(timestamp / 60);
@@ -151,7 +154,7 @@ export function timestampToString(timestamp: number) {
 	let seconds = Math.floor(timestamp);
 	timestamp -= seconds;
 	let centi = Math.floor(timestamp * 100);
-	return hours + ':' + minutes + ':' + seconds + '.' + centi;
+	return hours + ':' + pad(minutes.toString(), 2) + ':' + pad(seconds.toString(), 2) + '.' + pad(centi.toString(), 2);
 }
 
 export function reverseColor(color: string) {

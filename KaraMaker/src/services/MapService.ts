@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { KaraMakerMap } from '../maps/KaraMakerMap';
 import { KaraMakerLyric } from '../maps/KaraMakerLyric';
 import { KaraMakerVoice } from '../maps/KaraMakerVoice';
-import { RomajiSplit, colorToString, mix, pad, readColor, setAlphaRatio } from '../Utils';
+import { RomajiSplit, colorToString, mix, pad, readColor, setAlphaRatio, timestampToString } from '../Utils';
 
 @Injectable({
 	providedIn: 'root',
@@ -112,6 +112,10 @@ export class MapService {
 		return (this.currentTime / this.getLineDuration()) % 1;
 	}
 
+	getCurrentTimeString() {
+		return timestampToString(this.currentTime + this.map.track.start);
+	}
+
 	stop() {
 		if (this.playContext != undefined) {
 			this.playContext.audioNode.disconnect();
@@ -160,8 +164,8 @@ export class MapService {
 			setTime = -this.map.track.start;
 		if (setTime > this.getDuration())
 			setTime = this.getDuration();
-		if (this.currentTime < 0)
-			setTime = 0;
+		if (this.currentTime < -this.map.track.start)
+			setTime = -this.map.track.start;
 
 		if (this.selecting) {
 			let time = this.currentTime;
@@ -258,11 +262,11 @@ export class MapService {
 							start = k + 1;
 						}
 						if (isPoint && currentSentenceLyrics.length > 0) {
-								let startTime = currentSentenceLyrics[0].lyric * this.getLyricDuration() - 0.3;
+								let startTime = currentSentenceLyrics[0].lyric * this.getLyricDuration() - 0.9;
 								let endTime = currentSentenceLyrics[currentSentenceLyrics.length - 1].end * this.getLyricDuration() + 0.2;
 								let alpha = 1;
-							if (this.currentTime > startTime && this.currentTime < startTime + 0.3)
-								alpha = (this.currentTime - startTime) / 0.3;
+							if (this.currentTime > startTime && this.currentTime < startTime + 0.9)
+								alpha = (this.currentTime - startTime) / 0.9;
 
 								if (this.currentTime > endTime - 0.2 && this.currentTime < endTime)
 									alpha = (endTime - this.currentTime) / 0.2;
@@ -279,11 +283,11 @@ export class MapService {
 				}
 			}
 			if (currentSentenceLyrics.length > 0) {
-				let startTime = currentSentenceLyrics[0].lyric * this.getLyricDuration() - 0.3;
+				let startTime = currentSentenceLyrics[0].lyric * this.getLyricDuration() - 0.9;
 				let endTime = currentSentenceLyrics[currentSentenceLyrics.length - 1].end * this.getLyricDuration() + 0.2;
 				let alpha = 1;
-				if (this.currentTime > startTime && this.currentTime < startTime + 0.3)
-					alpha = (this.currentTime - startTime) / 0.3;
+				if (this.currentTime > startTime && this.currentTime < startTime + 0.9)
+					alpha = (this.currentTime - startTime) / 0.9;
 
 				if (this.currentTime > endTime - 0.2 && this.currentTime < endTime)
 					alpha = (endTime - this.currentTime) / 0.2;
@@ -339,6 +343,7 @@ export class MapService {
 	}
 
 	public push() {
+		console.log('Passe');
 		this.isSaved = false;
 		let newMap = { ...this.map };
 		newMap.lyrics = structuredClone(this.map.lyrics);

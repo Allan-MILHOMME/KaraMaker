@@ -38,7 +38,6 @@ export class MainComponent implements OnInit, OnDestroy {
 		const id = setInterval(() => {
 			if (mapService.playing())
 				this.cursor?.nativeElement.scrollIntoView({block: "nearest", behavior:"instant"});
-			//mapService.updateCurrentTime();
 			this.updateCurrentTime();
 		}, 10);
 		const destroyRef = inject(DestroyRef);
@@ -89,17 +88,30 @@ export class MainComponent implements OnInit, OnDestroy {
 	async handleKeyboardUpEvent(event: KeyboardEvent) {
 		if (event.code == "Enter") {
 			event.stopPropagation();
+			event.stopImmediatePropagation();
 			event.preventDefault();
 			this.mapService.selecting = undefined;
 		}
+
 	}
 
 	@HostListener('document:keydown', ['$event'])
 	async handleKeyboardEvent(event: KeyboardEvent) {
 		let focused = document.activeElement;
 
+		if (event.key == "z" && event.ctrlKey) {
+			event.stopPropagation();
+			event.preventDefault();
+			event.stopImmediatePropagation();
+			this.mapService.pop();
+		}
+
 		if (focused && focused.tagName.toLowerCase() === "input")
 			return;
+
+		event.stopImmediatePropagation();
+		event.preventDefault();
+		event.stopPropagation();
 
 		if ((event.code == "NumpadAdd" || event.code == "NumpadMultiply") && !event.ctrlKey && !event.altKey && !event.shiftKey) {
 			let add = event.code == "NumpadAdd";
@@ -151,12 +163,6 @@ export class MainComponent implements OnInit, OnDestroy {
 				}
 				
 			}
-		}
-
-		if (event.key == "z" && event.ctrlKey) {
-			event.stopPropagation();
-			event.preventDefault();
-			this.mapService.pop();
 		}
 
 		if (event.key == "s" && event.ctrlKey && !event.repeat) {
@@ -242,32 +248,34 @@ export class MainComponent implements OnInit, OnDestroy {
 		for (let voice of this.map.voices)
 			voices += colorExport.replace('{name}', voice.name).replace("{color}", reverseColor(voice.color).toUpperCase().replace('#', "&H00")) + "\n";
 
-		let lyrics = "";
-		for (let i = 0; i < this.map.voices.length;i++)
-			for (let sentence of this.mapService.getSentences()) {
-				let sentenceString = "";
-				for (let j = 0; j < sentence.lyrics.length; j++) {
-					let lyric = sentence.lyrics[j];
-					let diff = j == sentence.lyrics.length - 1 ?
-						this.mapService.getLyricDuration()
-						: (sentence.lyrics[j + 1].lyric - lyric.end + 1) * this.mapService.getLyricDuration();
+		let dialogs = "";
+		let comments = "";
+		for (let sentence of this.mapService.getSentences()) {
+			let sentenceString = "";
+			for (let j = 0; j < sentence.lyrics.length; j++) {
+				let lyric = sentence.lyrics[j];
+				let diff = j == sentence.lyrics.length - 1 ?
+					this.mapService.getLyricDuration()
+					: (sentence.lyrics[j + 1].lyric - lyric.end + 1) * this.mapService.getLyricDuration();
 
-					if (lyric.end !== lyric.lyric + 1) {
-						sentenceString += "{\\kf" + Math.floor((lyric.end - lyric.lyric) * this.mapService.getLyricDuration() * 100) + "}" +
-							lyric.content + "{\\k" + Math.floor((diff - this.mapService.getLyricDuration()) * 100) + "}";
-					}
-					else
-						sentenceString += "{\\k" + Math.floor(diff * 100) + "}" + lyric.content;
+				if (lyric.end !== lyric.lyric + 1) {
+					sentenceString += "{\\kf" + Math.floor((lyric.end - lyric.lyric) * this.mapService.getLyricDuration() * 100) + "}" +
+						lyric.content + "{\\k" + Math.floor((diff - this.mapService.getLyricDuration()) * 100) + "}";
 				}
-				lyrics += "Dialogue: 0," +
-					timestampToString(sentence.startTime + this.map.track.start) + ',' +
-					timestampToString(sentence.endTime + this.map.track.start) + ',' +
-					this.map.voices[i].name + ",,0,0,0,fx,{\\k30\\fad(300,200)}" + sentenceString + '\n'
-
-					sentenceString + "\n";
+				else
+					sentenceString += "{\\k" + Math.floor(diff * 100) + "}" + lyric.content;
 			}
+			comments += "Comment: 0," +
+				timestampToString(sentence.startTime + 0.9 + this.map.track.start) + ',' +
+				timestampToString(sentence.endTime - 0.2 + this.map.track.start) + ',' +
+				this.map.voices[sentence.voice].name + ",,0,0,0,karaoke," + sentenceString + '\n'
+			dialogs += "Dialogue: 0," +
+				timestampToString(sentence.startTime + this.map.track.start) + ',' +
+				timestampToString(sentence.endTime + this.map.track.start) + ',' +
+				this.map.voices[sentence.voice].name + ",,0,0,0,fx,{\\k90\\fad(300,200)}" + sentenceString + '\n'
+		}
 
-		let blob = new Blob([total.replace("{voices}", voices).replace("{lyrics}", lyrics)]);
+		let blob = new Blob([total.replace("{voices}", voices).replace("{comments}", comments).replace("{dialogs}", dialogs)]);
 		FileSaver.saveAs(blob, 'map.ass');
 	}
 
