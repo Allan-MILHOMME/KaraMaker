@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgZone, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
 import { MapService } from '../../services/MapService';
@@ -12,7 +12,7 @@ import BSON, { Binary } from 'bson';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-	constructor(private router: Router, private mapService: MapService) { }
+	constructor(private router: Router, private zone: NgZone, private mapService: MapService) { }
 
 	public dropped(files: NgxFileDropEntry[]) {
 		if (files.length == 1 && files[0].fileEntry.isFile) {
@@ -37,7 +37,7 @@ export class HomeComponent {
 					mapService.audioContext.decodeAudioData(mapService.map.track.datas.buffer.slice(0, mapService.map.track.datas.length)).then(decodedData => {
 						mapService.audioBuffer = decodedData;
 						mapService.updateLyricsSize();
-						router.navigate(["../timing"]);
+						this.zone.run(() => router.navigate(["../timing"]));
 					});
 				});
 			});

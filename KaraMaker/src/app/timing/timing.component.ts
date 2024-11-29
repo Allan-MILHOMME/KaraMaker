@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MapService } from '../../services/MapService';
@@ -14,7 +14,7 @@ export class TimingComponent {
 	waitingLyrics: string;
 	changed = false;
 
-	constructor(private router: Router, public mapService: MapService) {
+	constructor(private router: Router, private zone: NgZone, public mapService: MapService) {
 		this.waitingLyrics = mapService.map.waitingLyrics.join("\n");
 	}
 
@@ -33,7 +33,7 @@ export class TimingComponent {
 		if (this.changed)
 			this.mapService.push();
 
-		this.router.navigate(["../main"]);
+		this.zone.run(() => this.router.navigate(["../main"]));
 	}
 
 	addVoice() {

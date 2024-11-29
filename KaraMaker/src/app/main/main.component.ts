@@ -1,4 +1,4 @@
-import { Component, DestroyRef, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, DestroyRef, ElementRef, NgZone, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { MapService } from '../../services/MapService';
 import { Router } from '@angular/router';
@@ -25,7 +25,7 @@ export class MainComponent implements OnInit, OnDestroy {
 
 	@ViewChild('cursor') cursor?: ElementRef<HTMLInputElement>;
 
-	constructor(private router: Router, public mapService: MapService, private httpClient: HttpClient) {
+	constructor(private router: Router, private zone: NgZone, public mapService: MapService, private httpClient: HttpClient) {
 		this.updateMatrix(this.mapService.map.lyrics.length, this.mapService.getLyricsPerLine());
 		this.map = mapService.map;
 
@@ -303,10 +303,10 @@ export class MainComponent implements OnInit, OnDestroy {
 	}
 
 	close() {
-		this.router.navigate(["../home"]);
+		this.zone.run(() => this.router.navigate(["../home"]));
 	}
 
 	toTiming() {
-		this.router.navigate(["../timing"]);
+		this.zone.run(() => this.router.navigate(["../timing"]));
 	}
 }
